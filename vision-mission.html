@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edu-center.ai — Vision & Mission</title>
+    <style>
+        :root {
+            --bg: #0F0F11; --bg2: #1A1A1F; --bg3: #242429; --border: #333340;
+            --text: #E8E8ED; --text2: #9999A8; --text3: #6B6B7B;
+            --accent: #7C6EF6; --accent2: #9D92F8;
+            --green: #4ADE80; --green-bg: #132A1B;
+            --yellow: #FACC15; --yellow-bg: #2A2514;
+            --red: #F87171; --red-bg: #2A1414;
+            --blue: #60A5FA; --blue-bg: #14202A;
+            --orange: #FB923C;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        a { color: var(--accent2); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .layout { display: flex; min-height: 100vh; }
+        .sidebar { width: 280px; background: var(--bg2); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; z-index: 100; padding: 24px 0; }
+        .sidebar-logo { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+        .sidebar-logo h2 { font-size: 16px; font-weight: 600; color: var(--accent2); }
+        .sidebar-logo p { font-size: 12px; color: var(--text3); margin-top: 4px; }
+        .nav-group { padding: 8px 12px; }
+        .nav-group-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); padding: 8px 8px 4px; }
+        .nav-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-size: 13px; color: var(--text2); cursor: pointer; transition: all 0.15s; }
+        .nav-item:hover { background: var(--bg3); color: var(--text); }
+        .nav-item.active { background: var(--accent); color: #fff; font-weight: 500; }
+        .nav-item .num { font-size: 11px; font-weight: 600; min-width: 20px; }
+        .main { margin-left: 280px; flex: 1; padding: 32px 48px 80px; max-width: 1000px; }
+
+        h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+        h2 { font-size: 22px; font-weight: 600; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+        h2:first-of-type { margin-top: 0; }
+        h3 { font-size: 16px; font-weight: 600; margin: 24px 0 12px; color: var(--accent2); }
+        p { margin-bottom: 12px; font-size: 14px; color: var(--text2); }
+        .subtitle { font-size: 14px; color: var(--text3); margin-bottom: 32px; }
+        ul, ol { margin-left: 20px; margin-bottom: 12px; }
+        li { margin-bottom: 4px; font-size: 14px; color: var(--text2); }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+        .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+        .stat-label { font-size: 12px; color: var(--text3); margin-bottom: 4px; }
+        .stat-value { font-size: 24px; font-weight: 600; }
+        .stat-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+        .stat-card.green { border-color: #1A3D24; } .stat-card.green .stat-value { color: var(--green); }
+        .stat-card.blue { border-color: #1A2A3D; } .stat-card.blue .stat-value { color: var(--blue); }
+        .stat-card.yellow { border-color: #3D3A1A; } .stat-card.yellow .stat-value { color: var(--yellow); }
+        .stat-card.red { border-color: #3D1A1A; } .stat-card.red .stat-value { color: var(--red); }
+        .stat-card.accent { border-color: #2D2860; } .stat-card.accent .stat-value { color: var(--accent2); }
+
+        .table-wrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 16px 0; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        thead { background: var(--bg3); }
+        th { padding: 10px 14px; text-align: left; font-weight: 500; color: var(--text3); font-size: 12px; border-bottom: 1px solid var(--border); }
+        td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: var(--bg2); }
+        td strong { color: var(--text); }
+
+        .badge { display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: 20px; font-weight: 500; }
+        .b-green { background: var(--green-bg); color: var(--green); }
+        .b-yellow { background: var(--yellow-bg); color: var(--yellow); }
+        .b-red { background: var(--red-bg); color: var(--red); }
+        .b-blue { background: var(--blue-bg); color: var(--blue); }
+
+        .info-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 16px 0; font-size: 13px; line-height: 1.7; }
+        .info-box.highlight { border-left: 3px solid var(--accent); }
+        .info-box.warning { border-left: 3px solid var(--yellow); }
+        .info-box.success { border-left: 3px solid var(--green); }
+        .info-box.danger { border-left: 3px solid var(--red); }
+        .info-box strong { color: var(--text); }
+        .info-box p { margin-bottom: 8px; }
+        .info-box p:last-child { margin-bottom: 0; }
+
+        .three-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+        .card { border-radius: 12px; padding: 20px; text-align: center; }
+        .card.c-blue { background: var(--blue-bg); border: 1px solid #1A2A3D; }
+        .card.c-green { background: var(--green-bg); border: 1px solid #1A3D24; }
+        .card.c-orange { background: #2A1A14; border: 1px solid #3D2A1A; }
+        .card-icon { font-size: 2rem; margin-bottom: 8px; }
+        .card-title { font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--text); }
+        .card-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+        .roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+        .phase { border-radius: 12px; padding: 20px; }
+        .phase-1 { background: var(--blue-bg); border: 1px solid #1A2A3D; }
+        .phase-2 { background: var(--green-bg); border: 1px solid #1A3D24; }
+        .phase-3 { background: #1E1A3D; border: 1px solid #2D2860; }
+        .phase-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+        .phase-1 .phase-label { color: var(--blue); }
+        .phase-2 .phase-label { color: var(--green); }
+        .phase-3 .phase-label { color: var(--accent2); }
+        .phase-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+        .phase-time { font-size: 11px; color: var(--text3); margin-bottom: 10px; }
+        .phase ul { list-style: none; padding: 0; }
+        .phase li { font-size: 12px; padding: 3px 0; color: var(--text2); }
+        .phase-why { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text3); font-style: italic; }
+
+        .roadmap-connection { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; font-weight: 600; font-size: 13px; color: var(--text); margin: 0 0 16px; }
+        .roadmap-connection .chain { font-size: 12px; margin-top: 6px; color: var(--text2); }
+
+        .zone-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+        .zone-box { border-radius: 12px; padding: 16px 20px; }
+        .zone-box.frozen { background: var(--red-bg); border: 1px solid #3D1A1A; }
+        .zone-box.hot { background: var(--green-bg); border: 1px solid #1A3D24; }
+        .zone-label { font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 6px; }
+        .zone-box.frozen .zone-label { color: var(--red); }
+        .zone-box.hot .zone-label { color: var(--green); }
+        .zone-quote { font-style: italic; font-size: 14px; font-weight: 600; color: var(--text); }
+        .zone-desc { font-size: 11px; color: var(--text3); margin-top: 6px; }
+
+        .advantage-list { display: grid; gap: 10px; margin: 16px 0; }
+        .advantage-item { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; }
+        .adv-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; background: #1E1A3D; }
+        .adv-title { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+        .adv-desc { font-size: 12px; color: var(--text3); }
+
+        .workflow-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 16px 0; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; line-height: 1.8; overflow-x: auto; color: var(--text2); }
+        .workflow-box .wf-time { color: var(--accent2); font-weight: 600; }
+        .workflow-box .wf-action { color: var(--green); }
+        .workflow-box .wf-arrow { color: var(--text3); }
+        .workflow-box .wf-escalate { color: var(--orange); }
+
+        .arch-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin: 16px 0; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; line-height: 1.6; overflow-x: auto; white-space: pre; color: var(--text2); }
+
+        /* Multi-Agent Diagram */
+        .agent-diagram { display: flex; align-items: center; gap: 24px; margin: 24px 0; padding: 24px; overflow-x: auto; }
+        .agent-col { display: flex; flex-direction: column; gap: 16px; flex-shrink: 0; }
+        .agent-box { background: var(--bg); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px 20px; text-align: center; min-width: 150px; position: relative; }
+        .agent-box.supervisor { border-color: var(--accent); background: #1E1A2E; min-width: 180px; }
+        .agent-box.agent { border-color: var(--blue); background: var(--blue-bg); }
+        .agent-box.datasource { border-color: var(--border); background: var(--bg3); min-width: 140px; font-size: 12px; }
+        .agent-box.input { border-color: var(--green); background: var(--green-bg); }
+        .agent-box.output { border-color: var(--yellow); background: var(--yellow-bg); }
+        .agent-icon { font-size: 1.5rem; margin-bottom: 6px; }
+        .agent-name { font-weight: 700; font-size: 13px; color: var(--text); }
+        .agent-desc { font-size: 11px; color: var(--text3); margin-top: 4px; }
+        .agent-arrow { color: var(--text3); font-size: 20px; flex-shrink: 0; }
+        .agent-arrow-v { text-align: center; color: var(--text3); font-size: 14px; padding: 2px 0; }
+        .agent-row { display: flex; align-items: center; gap: 12px; }
+        .ds-group { display: flex; flex-direction: column; gap: 8px; }
+
+        @media (max-width: 768px) { .agent-diagram { flex-direction: column; } }
+
+        .jargon { font-size: 12px; color: var(--text3); font-style: italic; margin-top: 4px; }
+
+        @media print { .sidebar { display: none; } .main { margin-left: 0; } .section { display: block !important; page-break-inside: avoid; } }
+        @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } .three-cards, .roadmap, .zone-compare { grid-template-columns: 1fr; } .stat-grid { grid-template-columns: 1fr 1fr; } }
+
+        blockquote { border-left: 3px solid var(--accent); padding: 12px 16px; margin: 12px 0; background: var(--bg2); border-radius: 0 8px 8px 0; font-size: 13px; color: var(--text2); }
+        blockquote strong { color: var(--text); }
+    </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <h2>edu-center.ai</h2>
+        <p>Vision & Mission<br>Cập nhật: 07/04/2026</p>
+    </div>
+    <div class="nav-group">
+        <div class="nav-group-title">Vấn đề & Giải pháp</div>
+        <div class="nav-item active" onclick="showSection('problem')"><span class="num">01</span> Vấn đề cần giải quyết</div>
+        <div class="nav-item" onclick="showSection('whatis')"><span class="num">02</span> edu-center.ai là gì?</div>
+    </div>
+    <div class="nav-group">
+        <div class="nav-group-title">Thị trường</div>
+        <div class="nav-item" onclick="showSection('why-now')"><span class="num">03</span> Tại sao cần phần mềm + AI?</div>
+        <div class="nav-item" onclick="showSection('competitors')"><span class="num">04</span> Đối thủ & Cơ hội</div>
+    </div>
+    <div class="nav-group">
+        <div class="nav-group-title">Sản phẩm</div>
+        <div class="nav-item" onclick="showSection('architecture')"><span class="num">05</span> Architecture & Workflow</div>
+        <div class="nav-item" onclick="showSection('modules')"><span class="num">06</span> Chi tiết module</div>
+        <div class="nav-item" onclick="showSection('roadmap')"><span class="num">07</span> Lộ trình</div>
+    </div>
+    <div class="nav-group">
+        <div class="nav-group-title">Chiến lược</div>
+        <div class="nav-item" onclick="showSection('advantage')"><span class="num">08</span> Tại sao chúng ta thắng</div>
+        <div class="nav-item" onclick="showSection('vision')"><span class="num">09</span> Vision & Mission</div>
+        <div class="nav-item" onclick="showSection('appendix')"><span class="num">10</span> Phụ lục &mdash; Số liệu</div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- 01: PROBLEM -->
+<div class="section active" id="sec-problem">
+<h1>Chúng ta giải quyết vấn đề gì?</h1>
+<p class="subtitle">Khách hàng: chủ TT 100&ndash;400 HV &mdash; 15&ndash;25 lớp, 5&ndash;10 GV part-time, <strong>1&ndash;2 admin kiêm nhiệm tất cả</strong>.</p>
+
+<h2>① Mất doanh thu &mdash; vì không ai kịp xử lý lead và chăm khách</h2>
+
+<p>Mỗi trung tâm 200&ndash;400 HS đều có doanh thu rò rỉ âm thầm:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Điểm rò rỉ</th><th>Chuyện gì đang xảy ra</th><th style="color:var(--red)">Mất bao nhiêu?</th></tr></thead>
+<tbody>
+<tr>
+    <td><strong>Lead đến rồi rơi</strong></td>
+    <td>PH nhắn lúc 9&ndash;11 tối, sáng hôm sau mới reply &rarr; lead nguội hoặc đã đăng ký TT khác</td>
+    <td style="color:var(--red)">Rơi 5&ndash;10 lead/tháng = <strong>10&ndash;40 triệu/tháng</strong></td>
+</tr>
+<tr>
+    <td><strong>HS đang học vẫn nghỉ</strong></td>
+    <td>PH không được chăm sóc chủ động, không biết con học thế nào &rarr; chuyển TT</td>
+    <td style="color:var(--red)">Mất 1 HS = mất 2&ndash;4 triệu doanh thu còn lại</td>
+</tr>
+<tr>
+    <td><strong>Học phí thu không đủ</strong></td>
+    <td>Nhắc thiếu, nhắc ngại, công nợ tồn đọng không ai theo sát</td>
+    <td style="color:var(--red)">Thu HP 80% thay vì 95% &rarr; TT 300 HS mất <strong>15&ndash;30 triệu/tháng</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2>② Vận hành thiếu chuyên nghiệp &mdash; admin quá tải, nhân viên không biết cách xử lý</h2>
+
+<p>1&ndash;2 admin phải kiêm nhiệm tất cả: thu phí, check hoá đơn, xếp lịch, trả lời tin nhắn, nhập liệu, báo cáo. Kết quả:</p>
+
+<ul style="margin-bottom:16px">
+    <li><strong style="color:var(--red)">Trả lời khách không chuẩn:</strong> Nhân viên không biết rep lead thế nào &mdash; lúc quá ngắn gọn, lúc thiếu thông tin, lúc quên follow-up. Mỗi người trả lời một kiểu, không có quy trình</li>
+    <li><strong style="color:var(--red)">Sai sót vận hành:</strong> Quên nhắc học phí, xếp lịch trùng, ghi nhầm điểm danh, hoá đơn check thiếu &mdash; lỗi nhỏ nhưng làm PH mất niềm tin</li>
+    <li><strong style="color:var(--red)">Không có báo cáo, không có số liệu:</strong> Chủ TT không biết tháng này có bao nhiêu lead, chốt được bao nhiêu, HS nào sắp nghỉ &mdash; mọi thứ trong đầu admin</li>
+</ul>
+
+<h2>③ Admin hết thời gian &mdash; nhưng công việc thì không hết</h2>
+
+<p>Admin dành phần lớn thời gian cho <strong>việc lặp đi lặp lại</strong> &rarr; không còn thời gian cho việc thực sự tạo giá trị:</p>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Thời gian admin mất vào</th><th style="color:var(--yellow)">Thứ admin không kịp làm</th></tr></thead>
+<tbody>
+<tr><td>Soạn tin nhắc HP từng người (5&ndash;6 giờ/tháng)</td><td>Chăm sóc PH chủ động để giữ HS</td></tr>
+<tr><td>Trả lời tin nhắn routine: hỏi lịch, hỏi điểm, xin nghỉ (8&ndash;10 giờ/tuần)</td><td>Follow-up lead cũ chưa chốt</td></tr>
+<tr><td>Check hoá đơn, đối soát công nợ thủ công</td><td>Gửi báo cáo tiến độ HS cho PH</td></tr>
+<tr><td>Xếp lịch lại khi GV nghỉ (1&ndash;2 giờ/lần)</td><td>Phân tích data để cải thiện chất lượng</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Tại sao phần mềm hiện tại chưa giải quyết được?</h2>
+
+<div class="info-box warning">
+    <p>Đến năm 2026, hầu hết TT đã dùng phần mềm (Easy Edu, DotB, Google Sheet + Zalo). <strong>Không phải thiếu công cụ.</strong></p>
+</div>
+
+<ul style="margin-bottom:16px">
+    <li><strong>Công cụ không tự làm việc</strong> &mdash; vẫn cần admin ngồi nhập liệu, soạn tin, bấm gửi từng cái</li>
+    <li><strong>Công cụ không biết tư vấn</strong> &mdash; phần mềm quản lý không trả lời khách thay nhân viên được</li>
+    <li><strong>Thuê thêm người cũng không đủ</strong> &mdash; thêm 7&ndash;10 triệu/tháng nhưng vẫn không ai làm việc lúc 10 tối</li>
+</ul>
+
+<div class="info-box highlight">
+    <p><strong>edu-center.ai giải quyết cả 3 vấn đề cùng lúc:</strong></p>
+    <ul style="margin:8px 0 0 16px">
+        <li><strong style="color:var(--green)">Kiếm thêm tiền</strong> &mdash; bắt lead, giữ HS, thu HP đầy đủ</li>
+        <li><strong style="color:var(--blue)">Vận hành chuyên nghiệp</strong> &mdash; reply chuẩn, không sai sót, có số liệu</li>
+        <li><strong style="color:var(--yellow)">Tiết kiệm thời gian admin</strong> &mdash; tự động hoá việc lặp lại</li>
+    </ul>
+</div>
+</div>
+
+<!-- 02: WHAT IS -->
+<div class="section" id="sec-whatis">
+<h1>edu-center.ai là gì?</h1>
+<p class="subtitle">Bộ giải pháp AI giúp trung tâm tăng doanh thu &mdash; bằng cách tự động hoá 3 mảng chủ TT đang làm thủ công.</p>
+
+<h2>Tăng doanh thu &mdash; AI kiếm và chốt học viên mới</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Vấn đề</th><th>AI giải quyết bằng cách nào</th><th>Kết quả dự kiến*</th></tr></thead>
+<tbody>
+<tr><td><strong>Lead nhắn tin &rarr; reply chậm 2-3h</strong></td><td>AI reply 30 giây qua Zalo/FB: info, giá, lịch. Tự book lịch học thử</td><td style="color:var(--green)">Tỷ lệ chốt lead tăng gấp đôi</td></tr>
+<tr><td><strong>Lead chưa chốt &rarr; quên follow-up</strong></td><td>AI nhắn ngày 2 (hỏi thăm), ngày 5 (ưu đãi). HS cũ sắp hết khoá &rarr; nhắn gia hạn</td><td style="color:var(--green)">Lead rơi giảm từ 70% xuống 30%</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Giữ chân học sinh &mdash; AI chăm sóc phụ huynh tự động</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Vấn đề</th><th>AI giải quyết bằng cách nào</th><th>Kết quả dự kiến*</th></tr></thead>
+<tbody>
+<tr><td><strong>PH không biết tiến độ con &rarr; chuyển TT</strong></td><td>AI gửi báo cáo tuần: điểm danh, điểm số, nhận xét GV. PH cảm thấy "TT quan tâm"</td><td style="color:var(--green)">Tăng hài lòng PH, giảm churn</td></tr>
+<tr><td><strong>Học phí trễ &rarr; công nợ tồn</strong></td><td>AI nhắc PH trước 3 ngày, nhắc lại khi quá hạn. Báo cáo công nợ real-time</td><td style="color:var(--green)">Thu HP: 80% &rarr; 95%</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Giải phóng thời gian admin &mdash; AI xử lý phần lặp đi lặp lại</h2>
+<p>1 admin đang dành phần lớn thời gian vào những việc quan trọng nhưng không cần trí tuệ:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Công việc lặp lại</th><th>AI làm thay</th><th>Thời gian giải phóng</th></tr></thead>
+<tbody>
+<tr><td><strong>Nhắc HP từng PH</strong> (soạn tin, gửi, theo dõi ai chưa đóng)</td><td>AI tự nhắn cá nhân hóa, ghi nhận kết quả, leo thang khi quá hạn</td><td>~5&ndash;6 giờ/tháng</td></tr>
+<tr><td><strong>Trả lời routine</strong>: xin nghỉ, hỏi lịch, hỏi điểm</td><td>AI xử lý 60&ndash;70% routine. Phức tạp &rarr; chuyển người</td><td>~8&ndash;10 giờ/tuần</td></tr>
+<tr><td><strong>Gửi báo cáo tiến độ</strong> cho PH</td><td>AI tổng hợp điểm danh + điểm số &rarr; gửi Zalo hàng tuần</td><td style="color:var(--green)">Việc hiện tại <strong>không ai làm</strong></td></tr>
+<tr><td><strong>Xếp lịch lại</strong> khi GV nghỉ</td><td>AI kiểm tra lịch, tìm GV thay, thông báo PH</td><td>~1&ndash;2 giờ/lần phát sinh</td></tr>
+</tbody>
+</table>
+</div>
+<div class="info-box success">
+    <p><strong>Quan trọng hơn:</strong> AI giúp admin làm được những việc <strong>trước đây không ai làm</strong> vì không có thời gian &mdash; như gửi báo cáo tuần hay follow-up lead đã nguội. Đây là thứ tạo ra doanh thu, không chỉ tiết kiệm thời gian.</p>
+</div>
+
+<div class="info-box warning">
+    <p><strong>Lưu ý:</strong> Số liệu "dự kiến" dựa trên customer discovery (12 chủ TT, Q1/2026) và benchmark ngành (no-show giảm 30% với auto reminder, parent engagement tăng 88% với communication platform &mdash; Noto, Engageli 2025). Kiểm chứng bằng pilot thực tế.</p>
+</div>
+</div>
+
+<!-- 03: WHY NOW -->
+<div class="section" id="sec-why-now">
+<h1>Tại sao trung tâm cần phần mềm + AI ngay bây giờ?</h1>
+<p class="subtitle">Không thay đổi sẽ bị loại &mdash; AI đã đủ tốt để dùng thật</p>
+
+<h2>Áp lực từ thị trường</h2>
+
+<div class="three-cards">
+    <div class="card c-blue">
+        <div class="card-icon">&#128241;</div>
+        <div class="card-title">Phụ huynh kỳ vọng cao hơn</div>
+        <div class="card-desc">Quen Grab, Shopee, app ngân hàng &mdash; muốn mọi thứ real-time. TT nào gửi báo cáo tuần sẽ thắng TT "cuối kỳ mới biết điểm".</div>
+    </div>
+    <div class="card c-orange">
+        <div class="card-icon">&#9876;</div>
+        <div class="card-title">Cạnh tranh tăng mạnh</div>
+        <div class="card-desc">8,000-12,000+ TT cả nước. Riêng TP.HCM: 2,380 TT (tăng 6x từ 2010). TT vận hành tốt hơn &rarr; thắng.</div>
+    </div>
+    <div class="card c-green">
+        <div class="card-icon">&#128181;</div>
+        <div class="card-title">Chi phí nhân sự không giảm</div>
+        <div class="card-desc">1 admin CSKH: 8-12 tr/th. 1 tuyển sinh: 10-15 tr/th. AI xử lý 60-70% routine &mdash; rẻ hơn nhiều lần.</div>
+    </div>
+</div>
+
+<div class="info-box success">
+    <p><strong>94% phụ huynh hài lòng hơn</strong> khi TT có hệ thống giao tiếp tự động (Noto 2025). No-show giảm 30% với auto reminder. Đây không phải "nice to have" &mdash; đây là điều kiện cạnh tranh.</p>
+</div>
+
+<h2>AI đã đủ tốt để dùng thật</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Năng lực AI (2025-2026)</th><th>Ứng dụng cho TT dạy thêm</th></tr></thead>
+<tbody>
+<tr><td><strong>Chat AI tiếng Việt tự nhiên</strong> (GPT-4, Claude, Gemini)</td><td>Reply lead, trả lời PH, gửi báo cáo &mdash; không cần người 24/7</td></tr>
+<tr><td><strong>Voice AI gọi điện tiếng Việt</strong></td><td>Follow-up lead, nhắc học phí &mdash; thay nhân viên telesales</td></tr>
+<tr><td><strong>Chi phí API giảm 10x trong 2 năm</strong></td><td>SaaS 6-12 triệu/tháng vẫn có lãi, rẻ hơn 1 nhân viên</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="info-box highlight">
+    <p>Phần mềm hiện tại đủ để <strong>số hóa</strong> vận hành. Nhưng AI mở ra khả năng hoàn toàn mới: <strong>tự giao tiếp, tự phân tích, tự hành động</strong> &mdash; không chỉ lưu trữ và hiển thị. TT nào ứng dụng AI sớm tiết kiệm <strong>15-25 giờ/tuần</strong> cho chủ TT.</p>
+</div>
+</div>
+
+<!-- 04: COMPETITORS -->
+<div class="section" id="sec-competitors">
+<h1>Đối thủ & Cơ hội</h1>
+<p class="subtitle">Nhìn từ cả trong nước và quốc tế</p>
+
+<h2>Đối thủ trong nước</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Đối thủ</th><th>Điểm mạnh</th><th>Giới hạn</th></tr></thead>
+<tbody>
+<tr><td><strong>Easy Edu</strong></td><td>Brand mạnh, nhiều TT dùng, UI ổn</td><td style="color:var(--red)">Phần mềm quản lý thuần &mdash; không AI, không kiếm lead, vẫn nhập tay</td></tr>
+<tr><td><strong>DotB, ClassHub</strong></td><td>Giao diện tốt, giá cạnh tranh</td><td style="color:var(--red)">Tương tự &mdash; chỉ số hóa, không tự động hóa</td></tr>
+<tr><td><strong>MISA EMIS</strong></td><td>Hệ sinh thái MISA (kế toán)</td><td style="color:var(--red)">Focus mầm non/K12 công lập</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Đối thủ quốc tế (chưa vào VN, cần theo dõi)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Đối thủ</th><th>Thị trường</th><th>Điểm mạnh</th><th>Rủi ro</th></tr></thead>
+<tbody>
+<tr><td><strong>TutorCruncher</strong> (UK)</td><td>Bắc Mỹ, Châu Âu</td><td>Quản lý multi-branch, CRM, billing</td><td><span class="badge b-yellow">Sản phẩm mature, nếu vào SEA sẽ khó đấu</span></td></tr>
+<tr><td><strong>Teachworks</strong> (Canada)</td><td>Bắc Mỹ</td><td>UX đơn giản, solo tutor</td><td><span class="badge b-blue">Khác segment, ít rủi ro</span></td></tr>
+<tr><td><strong>Wise.live</strong></td><td>Global</td><td><strong>Đã có AI:</strong> predictive analytics, session summary, adaptive learning</td><td><span class="badge b-red">Nguy hiểm nhất &mdash; AI-first, chưa focus VN</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Tại sao AI là lợi thế thực sự &mdash; không chỉ "thêm feature"</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>So sánh</th><th>Nhân viên</th><th>Phần mềm truyền thống</th><th>edu-center.ai (AI)</th></tr></thead>
+<tbody>
+<tr><td><strong>Reply lead 24/7</strong></td><td>Không thể (8h/ngày)</td><td>Không có</td><td style="color:var(--green)"><strong>AI reply 30 giây, 24/7</strong></td></tr>
+<tr><td><strong>Nhắc HP 200 PH</strong></td><td>1 người &times; 2 ngày</td><td>Gửi hàng loạt, không cá nhân</td><td style="color:var(--green)"><strong>Nhắn cá nhân, đúng thời điểm</strong></td></tr>
+<tr><td><strong>Báo cáo tiến độ cho PH</strong></td><td>GV viết tay, chủ TT gửi</td><td>Dashboard &mdash; PH tự vào xem</td><td style="color:var(--green)"><strong>AI gửi qua Zalo hàng tuần</strong></td></tr>
+<tr><td><strong>Chi phí/tháng</strong></td><td>25-40 triệu</td><td>3-5 triệu</td><td style="color:var(--green)"><strong>6-12 triệu (thay 60-70% nhân sự)</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Cửa sổ cơ hội &mdash; tại sao phải nhanh?</h2>
+<div class="info-box highlight">
+    <p><strong>"Cửa sổ cơ hội"</strong> = khoảng thời gian thị trường có nhu cầu nhưng chưa ai đáp ứng tốt. Sau đó, đối thủ bắt kịp &rarr; cơ hội dẫn đầu khó hơn nhiều.</p>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th>Mốc thời gian</th><th>Điều gì sẽ xảy ra</th></tr></thead>
+<tbody>
+<tr><td><strong>Hiện tại (Q2/2026)</strong></td><td>5/6 PM TT lớn nhất VN chưa có AI. Wise.live có AI nhưng chưa vào VN. <span class="badge b-green">Thị trường "trống"</span></td></tr>
+<tr><td><strong>6&ndash;12 tháng nữa</strong></td><td>Easy Edu, DotB bắt đầu thêm chatbot cơ bản. Nhưng refactor PM cũ cần thời gian &mdash; không phải gắn API là xong</td></tr>
+<tr><td><strong>12&ndash;18 tháng nữa</strong></td><td>Đối thủ có AI mức dùng được. Startup mới xuất hiện. <span class="badge b-yellow">Ai có user + data trước sẽ thắng</span></td></tr>
+<tr><td><strong>18+ tháng</strong></td><td>Thị trường consolidate. <span class="badge b-red">Chưa có sản phẩm + khách &rarr; rất khó chen</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="info-box warning">
+    <p><strong>Rủi ro lớn nhất:</strong> Không phải đối thủ VN &mdash; mà là platform global. Nếu TutorCruncher hoặc Wise.live mở rộng SEA với AI sẵn + vốn lớn &rarr; có thể chiếm thị trường nhanh.</p>
+    <p><strong>Lợi thế:</strong> Tích hợp Zalo (đối thủ ngoài không có), hiểu context dạy thêm VN (khác tutoring Tây), giá phù hợp.</p>
+</div>
+</div>
+
+<!-- 05: ARCHITECTURE -->
+<div class="section" id="sec-architecture">
+<h1>Architecture &amp; Workflow</h1>
+<p class="subtitle">Hệ thống Multi-Agent: nhiều AI chuyên biệt, điều phối bởi 1 Supervisor trung tâm</p>
+
+<h2>Kiến trúc Multi-Agent</h2>
+<p>edu-center.ai hoạt động theo mô hình <strong>nhiều AI Agent chuyên biệt</strong>, được điều phối bởi 1 Supervisor Agent trung tâm. Mỗi agent đảm nhận 1 mảng, có quyền truy cập vào đúng data cần thiết.</p>
+
+<!-- Agent diagram using styled HTML boxes -->
+<div style="background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:32px 24px; margin:20px 0; overflow-x:auto;">
+
+  <!-- Row 1: Input + Supervisor -->
+  <div style="display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:24px; flex-wrap:wrap;">
+    <div style="background:var(--green-bg); border:1px solid #1A3D24; border-radius:12px; padding:14px 20px; text-align:center; min-width:130px;">
+      <div style="font-size:1.3rem;">&#x1F4F1;</div>
+      <div style="font-weight:700; font-size:13px; color:var(--text);">PH nhắn tin</div>
+      <div style="font-size:11px; color:var(--text3);">Zalo / Facebook / Website</div>
+    </div>
+    <div style="color:var(--text3); font-size:24px;">&#x2192;</div>
+    <div style="background:#1E1A2E; border:2px solid var(--accent); border-radius:14px; padding:18px 24px; text-align:center; min-width:200px;">
+      <div style="font-size:1.3rem;">&#x1F916;</div>
+      <div style="font-weight:700; font-size:15px; color:var(--accent2);">Supervisor Agent</div>
+      <div style="font-size:11px; color:var(--text3); margin-top:4px;">AI điều phối trung tâm<br>Nhận tin &rarr; phân loại &rarr; chuyển đúng agent</div>
+    </div>
+    <div style="color:var(--text3); font-size:24px;">&#x2192;</div>
+    <div style="background:var(--yellow-bg); border:1px solid #3D3A1A; border-radius:12px; padding:14px 20px; text-align:center; min-width:130px;">
+      <div style="font-size:1.3rem;">&#x1F4AC;</div>
+      <div style="font-weight:700; font-size:13px; color:var(--text);">Trả lời PH</div>
+      <div style="font-size:11px; color:var(--text3);">+ Thông báo chủ TT</div>
+    </div>
+  </div>
+
+  <!-- Connector line -->
+  <div style="text-align:center; color:var(--text3); font-size:13px; margin-bottom:16px;">&#x2193; &nbsp; phân loại &amp; chuyển cho agent phù hợp &nbsp; &#x2193;</div>
+
+  <!-- Row 2: 3 Agents + Data Sources -->
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+
+    <!-- Tư vấn Agent -->
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="background:var(--blue-bg); border:1.5px solid #2A4A6D; border-radius:12px; padding:14px 16px; text-align:center;">
+        <div style="font-size:1.2rem;">&#x1F916;</div>
+        <div style="font-weight:700; font-size:13px; color:var(--blue);">T&#432; v&#7845;n Agent</div>
+        <div style="font-size:11px; color:var(--text3);">Tr&#7843; l&#7901;i PH, book l&#7883;ch,<br>follow-up lead</div>
+      </div>
+      <div style="text-align:center; color:var(--text3); font-size:12px;">&#x2195;</div>
+      <div style="background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px;">
+        <div style="font-weight:600; color:var(--text); margin-bottom:4px;">&#x1F50D; Knowledge Base TT</div>
+        <div style="color:var(--text3); font-size:11px;">Th&ocirc;ng tin l&#7899;p, gi&aacute;, l&#7883;ch, GV</div>
+      </div>
+      <div style="background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px;">
+        <div style="font-weight:600; color:var(--text); margin-bottom:4px;">&#x1F4CA; Lead Pipeline</div>
+        <div style="color:var(--text3); font-size:11px;">Tr&#7841;ng th&aacute;i lead, follow-up queue</div>
+      </div>
+    </div>
+
+    <!-- Chăm sóc Agent -->
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="background:var(--green-bg); border:1.5px solid #1A5D34; border-radius:12px; padding:14px 16px; text-align:center;">
+        <div style="font-size:1.2rem;">&#x1F916;</div>
+        <div style="font-weight:700; font-size:13px; color:var(--green);">Ch&#259;m s&oacute;c Agent</div>
+        <div style="font-size:11px; color:var(--text3);">B&aacute;o c&aacute;o PH, nh&#7855;c HP,<br>theo d&otilde;i c&ocirc;ng n&#7907;</div>
+      </div>
+      <div style="text-align:center; color:var(--text3); font-size:12px;">&#x2195;</div>
+      <div style="background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px;">
+        <div style="font-weight:600; color:var(--text); margin-bottom:4px;">&#x1F4D1; Data HS/PH</div>
+        <div style="color:var(--text3); font-size:11px;">&#272;i&#7875;m danh, &#273;i&#7875;m s&#7889;, l&#7883;ch s&#7917; chat</div>
+      </div>
+      <div style="background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px;">
+        <div style="font-weight:600; color:var(--text); margin-bottom:4px;">&#x1F4B0; H&#7885;c ph&iacute; &amp; C&ocirc;ng n&#7907;</div>
+        <div style="color:var(--text3); font-size:11px;">Ho&aacute; &#273;&#417;n, nh&#7855;c, qu&aacute; h&#7841;n</div>
+      </div>
+    </div>
+
+    <!-- Vận hành Agent -->
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="background:#2A1A14; border:1.5px solid #5D3A1A; border-radius:12px; padding:14px 16px; text-align:center;">
+        <div style="font-size:1.2rem;">&#x1F916;</div>
+        <div style="font-weight:700; font-size:13px; color:var(--orange);">V&#7853;n h&agrave;nh Agent</div>
+        <div style="font-size:11px; color:var(--text3);">X&#7871;p l&#7883;ch, GV ngh&#7881;,<br>&#273;i&#7875;m danh, l&#432;&#417;ng</div>
+      </div>
+      <div style="text-align:center; color:var(--text3); font-size:12px;">&#x2195;</div>
+      <div style="background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px;">
+        <div style="font-weight:600; color:var(--text); margin-bottom:4px;">&#x1F4C5; L&#7883;ch GV &amp; Ph&ograve;ng</div>
+        <div style="color:var(--text3); font-size:11px;">X&#7871;p l&#7883;ch, &#273;i&#7875;m danh, l&#432;&#417;ng GV</div>
+      </div>
+      <div style="background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-size:12px;">
+        <div style="font-weight:600; color:var(--text); margin-bottom:4px;">&#x1F4CA; Dashboard ch&#7911; TT</div>
+        <div style="color:var(--text3); font-size:11px;">B&aacute;o c&aacute;o, duy&#7879;t &#273;&#7873; xu&#7845;t AI</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<h2>M&#7895;i Agent l&agrave;m g&igrave;?</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Agent</th><th>Vai tr&ograve;</th><th>K&#7871;t n&#7889;i v&#7899;i</th><th>V&iacute; d&#7909; th&#7921;c t&#7871;</th></tr></thead>
+<tbody>
+<tr><td><strong style="color:var(--accent2)">Supervisor</strong></td><td>Nh&#7853;n m&#7885;i tin nh&#7855;n, ph&acirc;n lo&#7841;i &rarr; chuy&#7875;n cho &#273;&uacute;ng agent. Ph&#7913;c t&#7841;p &rarr; chuy&#7875;n ng&#432;&#7901;i</td><td>T&#7845;t c&#7843; agent + Dashboard</td><td>PH nh&#7855;n "c&oacute; l&#7899;p To&aacute;n 9 kh&ocirc;ng?" &rarr; chuy&#7875;n T&#432; v&#7845;n Agent</td></tr>
+<tr><td><strong style="color:var(--blue)">T&#432; v&#7845;n</strong></td><td>Tr&#7843; l&#7901;i PH v&#7873; l&#7899;p, gi&aacute;, l&#7883;ch. Book h&#7885;c th&#7917;. Follow-up lead</td><td>Knowledge Base + Lead Pipeline</td><td>Reply 30 gi&acirc;y: info l&#7899;p, gi&aacute;. PH mu&#7889;n &rarr; book lu&ocirc;n</td></tr>
+<tr><td><strong style="color:var(--green)">Ch&#259;m s&oacute;c</strong></td><td>G&#7917;i b&aacute;o c&aacute;o ti&#7871;n &#273;&#7897; HS. Nh&#7855;c HP. Theo d&otilde;i c&ocirc;ng n&#7907;</td><td>Data HS/PH + H&#7885;c ph&iacute;</td><td>Nh&#7855;c HP c&aacute; nh&acirc;n h&oacute;a, b&aacute;o c&aacute;o tu&#7847;n, c&#7843;nh b&aacute;o c&ocirc;ng n&#7907;</td></tr>
+<tr><td><strong style="color:var(--orange)">V&#7853;n h&agrave;nh</strong></td><td>X&#7871;p l&#7883;ch, x&#7917; l&yacute; GV ngh&#7881;, &#273;i&#7875;m danh, t&iacute;nh l&#432;&#417;ng. B&aacute;o c&aacute;o ch&#7911; TT</td><td>L&#7883;ch GV + Dashboard</td><td>GV ngh&#7881; &rarr; t&igrave;m GV thay &rarr; th&ocirc;ng b&aacute;o PH</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>C&aacute;ch Supervisor &#273;i&#7873;u ph&#7889;i</h2>
+
+<h3>Tr&#432;&#7901;ng h&#7907;p 1: PH h&#7887;i v&#7873; l&#7899;p h&#7885;c</h3>
+<div class="workflow-box"><span class="wf-action">PH nh&#7855;n:</span> "C&oacute; l&#7899;p To&aacute;n 9 kh&ocirc;ng?"
+       <span class="wf-arrow">│</span>
+       <span class="wf-arrow">▼</span>
+       <span class="wf-action">Supervisor</span> nh&#7853;n tin t&#7915; Zalo &rarr; nh&#7853;n di&#7879;n: h&#7887;i v&#7873; l&#7899;p h&#7885;c
+       <span class="wf-arrow">│</span>   &rarr; Chuy&#7875;n cho <span style="color:var(--blue); font-weight:600;">T&#432; v&#7845;n Agent</span>
+       <span class="wf-arrow">▼</span>
+       <span style="color:var(--blue); font-weight:600;">T&#432; v&#7845;n Agent:</span>
+       <span class="wf-arrow">├──</span> Tra Knowledge Base: l&#7899;p To&aacute;n 9, T3-T5-T7 17h-19h, 1.5tr/th&aacute;ng
+       <span class="wf-arrow">├──</span> Ki&#7875;m tra: c&ograve;n ch&#7895; kh&ocirc;ng? &rarr; C&ograve;n 3 ch&#7895;
+       <span class="wf-arrow">├──</span> Tr&#7843; l&#7901;i PH qua Zalo
+       <span class="wf-arrow">│</span>
+       <span class="wf-arrow">▼</span>
+       PH: "Cho con &#273;&#259;ng k&yacute; h&#7885;c th&#7917;"
+       <span class="wf-arrow">├──</span> <span class="wf-action">Book l&#7883;ch h&#7885;c th&#7917; &rarr; g&#7917;i x&aacute;c nh&#7853;n</span>
+       <span class="wf-arrow">├──</span> T&#7841;o lead trong pipeline &rarr; tr&#7841;ng th&aacute;i "&#272;&atilde; book h&#7885;c th&#7917;"
+       <span class="wf-arrow">└──</span> N&#7871;u PH kh&ocirc;ng &#273;&#7871;n &rarr; t&#7921; follow-up ng&agrave;y 2 v&agrave; ng&agrave;y 5
+</div>
+
+<h3>Tr&#432;&#7901;ng h&#7907;p 2: PH negotiate &rarr; chuy&#7875;n ng&#432;&#7901;i</h3>
+<div class="workflow-box"><span class="wf-action">PH nh&#7855;n:</span> "T&ocirc;i mu&#7889;n gi&#7843;m gi&aacute;"
+       <span class="wf-arrow">│</span>
+       <span class="wf-arrow">▼</span>
+       <span class="wf-action">Supervisor:</span>
+       <span class="wf-arrow">├──</span> Nh&#7853;n di&#7879;n: negotiate gi&aacute; &rarr; <span class="wf-escalate">NGO&Agrave;I quy&#7873;n AI</span>
+       <span class="wf-arrow">├──</span> T&#7841;o th&ocirc;ng b&aacute;o cho ch&#7911; TT tr&ecirc;n Dashboard
+       <span class="wf-arrow">│</span>   k&egrave;m context: "PH Nguy&#7877;n Th&#7883; Lan, h&#7887;i l&#7899;p To&aacute;n 9,
+       <span class="wf-arrow">│</span>   mu&#7889;n gi&#7843;m gi&aacute;. L&#7883;ch s&#7917;: 2 con &#273;ang h&#7885;c, HP &#273;&uacute;ng h&#7841;n."
+       <span class="wf-arrow">└──</span> Reply PH: <span class="wf-action">"Em ghi nh&#7853;n &#7841;, anh/ch&#7883; qu&#7843;n l&yacute; s&#7869; li&ecirc;n h&#7879; ch&#7883; trong 30 ph&uacute;t nh&eacute;."</span>
+</div>
+
+<h2>Nguy&ecirc;n t&#7855;c AI: Khi n&agrave;o t&#7921; x&#7917; l&yacute;, khi n&agrave;o chuy&#7875;n ng&#432;&#7901;i?</h2>
+
+<div class="table-wrap">
+<table>
+<thead><tr><th style="color:var(--green)">AI t&#7921; x&#7917; l&yacute; (~80% tr&#432;&#7901;ng h&#7907;p)</th><th style="color:var(--yellow)">Chuy&#7875;n cho ch&#7911; TT</th></tr></thead>
+<tbody>
+<tr><td>Tr&#7843; l&#7901;i info l&#7899;p, gi&aacute;, l&#7883;ch</td><td style="color:var(--yellow)">PH h&#7887;i gi&#7843;m gi&aacute; / negotiate</td></tr>
+<tr><td>Book l&#7883;ch h&#7885;c th&#7917;</td><td style="color:var(--yellow)">Khi&#7871;u n&#7841;i, ph&#7843;n h&#7891;i ti&ecirc;u c&#7921;c</td></tr>
+<tr><td>Nh&#7855;c HP (t&#7889;i &#273;a 3 l&#7847;n, c&aacute;ch 5 ng&agrave;y)</td><td style="color:var(--yellow)">C&ocirc;ng n&#7907; qu&aacute; h&#7841;n &gt; 30 ng&agrave;y</td></tr>
+<tr><td>G&#7917;i b&aacute;o c&aacute;o ti&#7871;n &#273;&#7897; HS</td><td style="color:var(--yellow)">AI kh&ocirc;ng ch&#7855;c ch&#7855;n (t&igrave;nh hu&#7889;ng l&#7841;)</td></tr>
+<tr><td>Ghi nh&#7853;n xin ngh&#7881;, th&ocirc;ng b&aacute;o GV</td><td style="color:var(--yellow)">C&acirc;u h&#7887;i ngo&agrave;i ph&#7841;m vi (ph&aacute;p l&yacute;, h&#7907;p &#273;&#7891;ng)</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>M&#7895;i TT c&#7845;u h&igrave;nh rule ri&ecirc;ng tr&ecirc;n Dashboard: AI ch&#7881; b&aacute;o gi&aacute; ni&ecirc;m y&#7871;t (kh&ocirc;ng t&#7921; gi&#7843;m gi&aacute;), ch&#7881; book l&#7899;p c&ograve;n ch&#7895;, ch&#7881; g&#7917;i tin 8:00&ndash;21:00.</p>
+
+<div class="info-box highlight">
+    <p><strong>Nguy&ecirc;n t&#7855;c:</strong> AI l&agrave;m t&#7889;t vi&#7879;c l&#7863;p l&#7841;i. Vi&#7879;c c&#7847;n ph&aacute;n &#273;o&aacute;n &rarr; chuy&#7875;n ng&#432;&#7901;i ngay, k&egrave;m context &#273;&#7875; ch&#7911; TT x&#7917; l&yacute; nhanh.</p>
+</div>
+
+<h2>M&#7897;t ng&agrave;y v&#7853;n h&agrave;nh th&#7921;c t&#7871;</h2>
+<div class="workflow-box">
+<span class="wf-time">08:00</span>  PH m&#7899;i nh&#7855;n Zalo h&#7887;i v&#7873; l&#7899;p To&aacute;n 9
+       <span class="wf-arrow">&rarr;</span> Supervisor <span class="wf-arrow">&rarr;</span> <span style="color:var(--blue)">T&#432; v&#7845;n Agent</span>
+       <span class="wf-arrow">&rarr;</span> <span class="wf-action">Reply 30 gi&acirc;y:</span> "L&#7899;p To&aacute;n 9, T3-T5-T7 17h-19h, 1.5tr/th&aacute;ng.
+         Anh/ch&#7883; mu&#7889;n &#273;&#259;ng k&yacute; h&#7885;c th&#7917; kh&ocirc;ng &#7841;?"
+       <span class="wf-arrow">├──</span> PH &#273;&#7891;ng &yacute; <span class="wf-arrow">&rarr;</span> <span class="wf-action">Book l&#7883;ch, t&#7841;o lead</span>
+       <span class="wf-arrow">└──</span> PH negotiate <span class="wf-arrow">&rarr;</span> <span class="wf-escalate">Chuy&#7875;n ch&#7911; TT k&egrave;m context</span>
+
+<span class="wf-time">10:00</span>  HS Minh v&#7855;ng bu&#7893;i th&#7913; 3
+       <span class="wf-arrow">&rarr;</span> <span style="color:var(--green)">Ch&#259;m s&oacute;c Agent</span> ph&aacute;t hi&#7879;n <span class="wf-arrow">&rarr;</span> B&aacute;o ch&#7911; TT: "HS Minh v&#7855;ng 3 bu&#7893;i"
+       <span class="wf-arrow">&rarr;</span> Ch&#7911; TT duy&#7879;t <span class="wf-arrow">&rarr;</span> <span class="wf-action">AI nh&#7855;n PH h&#7887;i th&#259;m qua Zalo</span>
+
+<span class="wf-time">14:00</span>  &#272;&#7871;n h&#7841;n h&#7885;c ph&iacute; 50 PH
+       <span class="wf-arrow">&rarr;</span> <span style="color:var(--green)">Ch&#259;m s&oacute;c Agent</span> g&#7917;i tin c&aacute; nh&acirc;n cho t&#7915;ng PH:
+         "Ch&agrave;o ch&#7883; Lan, HP th&aacute;ng 4 b&eacute; Minh 1.5 tri&#7879;u, h&#7841;n 15/4."
+       <span class="wf-arrow">├──</span> PH &#273;&oacute;ng <span class="wf-arrow">&rarr;</span> <span class="wf-action">AI ghi nh&#7853;n, c&#7853;p nh&#7853;t c&ocirc;ng n&#7907;</span>
+       <span class="wf-arrow">└──</span> Qu&aacute; h&#7841;n 7 ng&agrave;y <span class="wf-arrow">&rarr;</span> <span class="wf-escalate">Nh&#7855;c l&#7847;n 2 + b&aacute;o ch&#7911; TT</span>
+
+<span class="wf-time">16:00</span>  GV Th&#7855;ng b&aacute;o ngh&#7881; &#273;&#7897;t xu&#7845;t
+       <span class="wf-arrow">&rarr;</span> <span style="color:var(--orange)">V&#7853;n h&agrave;nh Agent</span> ki&#7875;m l&#7883;ch <span class="wf-arrow">&rarr;</span> T&igrave;m GV thay <span class="wf-arrow">&rarr;</span> &#272;&#7873; xu&#7845;t ch&#7911; TT
+       <span class="wf-arrow">&rarr;</span> Duy&#7879;t <span class="wf-arrow">&rarr;</span> <span class="wf-action">AI th&ocirc;ng b&aacute;o PH: "Th&#7847;y H&ugrave;ng d&#7841;y thay, n&#7897;i dung kh&ocirc;ng &#273;&#7893;i."</span>
+
+<span class="wf-time">22:00</span>  Cu&#7889;i ng&agrave;y
+       <span class="wf-arrow">&rarr;</span> <span style="color:var(--accent2)">Supervisor</span> t&#7893;ng h&#7907;p: "3 lead m&#7899;i (1 &#273;&atilde; book), 45/50 PH &#273;&atilde; &#273;&oacute;ng HP,
+         2 HS c&#7847;n theo d&otilde;i, 1 GV ngh&#7881; &#273;&atilde; x&#7917; l&yacute;."
+</div>
+
+</div>
+
+<!-- 06: MODULES -->
+<div class="section" id="sec-modules">
+<h1>Chi tiết từng module</h1>
+<p class="subtitle">Mỗi module: Input &rarr; AI xử lý &rarr; Output</p>
+
+<h2>Phase 1 &mdash; Tăng doanh thu (Q2-Q3/2026)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Module</th><th>Input</th><th>AI xử lý</th><th>Output</th></tr></thead>
+<tbody>
+<tr><td><strong>AI Lead Capture</strong></td><td>PH nhắn Zalo/FB/Web</td><td>Reply tự nhiên: info lớp, giá, lịch. Book lịch học thử. Gắn tag phân loại lead</td><td>Lead ghi nhận + lịch book sẵn &mdash; không mất lead vì chậm</td></tr>
+<tr><td><strong>AI Sales Follow-up</strong></td><td>Lead chưa chốt sau học thử</td><td>Ngày 2: hỏi thăm. Ngày 5: ưu đãi/social proof. HS cũ hết khoá: nhắn gia hạn</td><td>Pipeline tự chuyển trạng thái. Chủ TT chỉ focus lead "nóng"</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Phase 2 &mdash; Giữ chân & Vận hành (Q4/2026 &ndash; Q1/2027)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Module</th><th>Input</th><th>AI xử lý</th><th>Output</th></tr></thead>
+<tbody>
+<tr><td><strong>AI Chăm sóc & Thu phí</strong></td><td>Điểm danh, điểm số, lịch thu phí</td><td>Báo cáo tuần cho PH. Nhắc HP cá nhân hóa. Cảnh báo công nợ real-time</td><td>PH cảm thấy được quan tâm &rarr; giữ HS. Thu phí 80% &rarr; 95%</td></tr>
+<tr><td><strong>Smart Workflow</strong></td><td>Đăng ký HS, lịch GV, phòng</td><td>Tự xếp lịch (tránh conflict). Điểm danh QR &rarr; auto tính lương GV</td><td>Tiết kiệm ~12 giờ/tuần xếp lịch + tính lương</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Phase 3 &mdash; Giải phóng chủ TT (2027+)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Module</th><th>Input</th><th>AI xử lý</th><th>Output</th></tr></thead>
+<tbody>
+<tr><td><strong>Orchid Agent</strong></td><td>Toàn bộ inbox + data 6+ tháng</td><td>Xử lý tự động: PH xin nghỉ, hỏi tiến độ, GV nghỉ. Escalate khi phức tạp</td><td>TT chạy tốt ngay cả khi chủ không ngồi đó</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- 07: ROADMAP -->
+<div class="section" id="sec-roadmap">
+<h1>Lộ trình &mdash; Bán gì trước?</h1>
+<p class="subtitle">Mỗi phase tạo nhu cầu cho phase tiếp theo</p>
+
+<div class="roadmap">
+    <div class="phase phase-1">
+        <div class="phase-label">Phase 1 &mdash; Kiếm Tiền</div>
+        <div class="phase-title">Q2&ndash;Q3 2026</div>
+        <ul><li>&#128640; AI Lead Capture</li><li>&#128640; AI Sales Follow-up</li></ul>
+        <div class="phase-why">"AI kiếm thêm HS cho tôi"</div>
+    </div>
+    <div class="phase phase-2">
+        <div class="phase-label">Phase 2 &mdash; Giữ chân & Vận hành</div>
+        <div class="phase-title">Q4 2026 &ndash; Q1 2027</div>
+        <ul><li>&#128737; AI Chăm sóc & Thu phí</li><li>&#128737; Smart Workflow</li></ul>
+        <div class="phase-why">"PH hài lòng hơn, thu phí đủ hơn, tôi bớt việc"</div>
+    </div>
+    <div class="phase phase-3">
+        <div class="phase-label">Phase 3 &mdash; Giải Phóng Chủ</div>
+        <div class="phase-title">2027+</div>
+        <ul><li>&#129302; Orchid Agent</li></ul>
+        <div class="phase-why">"AI hiểu TT tôi hơn bất kỳ ai"</div>
+    </div>
+</div>
+
+<div class="roadmap-connection">
+    Mỗi phase TẠO NHU CẦU cho phase tiếp theo
+    <div class="chain">TT có thêm HS &#10140; Cần chăm sóc tốt hơn &#10140; Có data &#10140; AI tự chạy</div>
+</div>
+
+<h2>Tại sao bán Phase 1 trước?</h2>
+<div class="info-box highlight">
+    <p>Từ <strong>12 cuộc phỏng vấn customer discovery</strong> (Q1/2026):</p>
+    <p>&bull; <strong>12/12 chủ TT</strong> hỏi về cách kiếm thêm học viên</p>
+    <p>&bull; <strong>0/12</strong> chủ động hỏi về phần mềm quản lý</p>
+</div>
+<div class="zone-compare">
+    <div class="zone-box frozen">
+        <div class="zone-label">&#10060; Bán quản lý trước</div>
+        <div class="zone-quote">"Excel ổn mà, tôi không cần"</div>
+        <div class="zone-desc">Khó bán &mdash; chưa cảm thấy pain</div>
+    </div>
+    <div class="zone-box hot">
+        <div class="zone-label">&#10004; Bán lead gen trước</div>
+        <div class="zone-quote">"Cho tôi xem đi!"</div>
+        <div class="zone-desc">Sẵn sàng trả tiền ngay</div>
+    </div>
+</div>
+</div>
+
+<!-- 08: ADVANTAGE -->
+<div class="section" id="sec-advantage">
+<h1>Tại sao chúng ta sẽ thắng?</h1>
+<p class="subtitle">5 lợi thế cốt lõi</p>
+<div class="advantage-list">
+    <div class="advantage-item">
+        <div class="adv-icon">&#127919;</div>
+        <div><div class="adv-title">Đúng pain, đúng lúc</div><div class="adv-desc">Bán lead gen &mdash; thứ khách đang cần. Không ép ERP &mdash; thứ khách chưa muốn</div></div>
+    </div>
+    <div class="advantage-item">
+        <div class="adv-icon">&#129302;</div>
+        <div><div class="adv-title">AI-native</div><div class="adv-desc">Xây từ đầu với AI ở lõi. Đối thủ cần 12-18 tháng refactor phần mềm cũ</div></div>
+    </div>
+    <div class="advantage-item">
+        <div class="adv-icon">&#127891;</div>
+        <div><div class="adv-title">Chuyên biệt cho dạy thêm VN</div><div class="adv-desc">Hiểu context: dạy thêm ≠ tutoring Tây. Tích hợp Zalo &mdash; đối thủ global không có</div></div>
+    </div>
+    <div class="advantage-item">
+        <div class="adv-icon">&#128181;</div>
+        <div><div class="adv-title">Rẻ hơn nhân sự, mạnh hơn phần mềm</div><div class="adv-desc">6-12 triệu/tháng thay vì 25-40 triệu nhân sự. Reply 24/7, cá nhân hóa cho hàng trăm PH</div></div>
+    </div>
+    <div class="advantage-item">
+        <div class="adv-icon">&#128274;</div>
+        <div><div class="adv-title">Data moat <span style="font-weight:400;color:var(--text3)">(hào bảo vệ bằng dữ liệu)</span></div><div class="adv-desc">Càng dùng lâu, AI càng hiểu cách vận hành từng TT &rarr; rất khó chuyển tool khác</div></div>
+    </div>
+</div>
+</div>
+
+<!-- 09: VISION -->
+<div class="section" id="sec-vision">
+<h1>Vision & Mission</h1>
+<p class="subtitle">Tầm nhìn dài hạn và hành động hôm nay</p>
+
+<h2>Vision &mdash; 5 năm nữa</h2>
+<div class="info-box highlight" style="text-align:center">
+    <p style="font-size:16px;line-height:1.8"><strong>Trở thành nền tảng AI mặc định của ngành dạy thêm Việt Nam &mdash; nơi mỗi trung tâm đều có một đội ngũ AI giúp kiếm học viên, vận hành trơn tru, và phát triển bền vững mà không phụ thuộc vào một mình chủ trung tâm.</strong></p>
+</div>
+
+<h2>Mission &mdash; Hôm nay</h2>
+<div class="info-box success" style="text-align:center">
+    <p style="font-size:15px;line-height:1.8"><strong>Giúp trung tâm dạy thêm kiếm thêm học viên và chốt đơn tốt hơn bằng AI &mdash; bắt đầu từ thứ họ cần nhất: không bao giờ mất lead vì reply chậm.</strong></p>
+</div>
+
+<h2>Core Belief</h2>
+<div class="info-box" style="background:#1A1040;border-color:var(--accent);text-align:center">
+    <p style="font-size:15px;line-height:1.8;color:var(--text)"><strong>AI sẽ thay đổi cách mọi người làm việc trong 2 năm tới. Lúc đó nó không còn là công nghệ &mdash; nó là đồng nghiệp.</strong></p>
+    <p style="font-size:14px;color:var(--text2)">Trung tâm nào có "đồng nghiệp AI" sớm sẽ thắng. <strong style="color:var(--accent2)">Chúng ta xây đồng nghiệp đó cho họ.</strong></p>
+</div>
+</div>
+
+<!-- 10: APPENDIX -->
+<div class="section" id="sec-appendix">
+<h1>Phụ lục &mdash; Số liệu thị trường</h1>
+<p class="subtitle">Dữ liệu tham chiếu cho các phần trên</p>
+
+<h2>Số liệu thị trường</h2>
+<div class="stat-grid">
+    <div class="stat-card accent"><div class="stat-label">TT ngoại ngữ TP.HCM</div><div class="stat-value">2,380</div><div class="stat-sub">Tăng 6x từ 2010 &mdash; <a href="https://vnexpress.net/nguoi-viet-dau-tu-hoc-tieng-anh-the-nao-4796385.html" target="_blank">VnExpress</a></div></div>
+    <div class="stat-card accent"><div class="stat-label">TT ngoại ngữ Hà Nội</div><div class="stat-value">955</div><div class="stat-sub">Gấp đôi từ 562 (2018) &mdash; <a href="https://vnexpress.net/nguoi-viet-dau-tu-hoc-tieng-anh-the-nao-4796385.html" target="_blank">VnExpress</a></div></div>
+    <div class="stat-card green"><div class="stat-label">Ước tính cả nước</div><div class="stat-value">8K&ndash;12K+</div><div class="stat-sub">Ngoại ngữ + dạy thêm có quy mô</div></div>
+    <div class="stat-card blue"><div class="stat-label">Thị trường ELT VN</div><div class="stat-value">$540M</div><div class="stat-sub">2024, CAGR >10% &mdash; <a href="https://www.ey.com/vi_vn/insights/strategy/thi-truong-dao-tao-tieng-anh-tai-viet-nam-cuoc-dua-chuan-hoa-va-mo-rong-tang-truong" target="_blank">EY Vietnam</a></div></div>
+    <div class="stat-card yellow"><div class="stat-label">Quản lý TT toàn cầu</div><div class="stat-value">$1.86B</div><div class="stat-sub">By 2032, CAGR 14.6% &mdash; Noto 2025</div></div>
+    <div class="stat-card"><div class="stat-label">AI in Education toàn cầu</div><div class="stat-value">$32.3B</div><div class="stat-sub">By 2030, CAGR 31.2% &mdash; Engageli 2025</div></div>
+</div>
+
+<h2>TAM / SAM / SOM</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Khái niệm</th><th>Giải thích</th><th>Con số</th></tr></thead>
+<tbody>
+<tr><td><strong>TAM</strong></td><td>Total Addressable Market &mdash; toàn bộ TT có quy mô tại VN</td><td><strong>~8,000&ndash;12,000 TT</strong></td></tr>
+<tr><td><strong>SAM</strong></td><td>Serviceable Addressable Market &mdash; TT 100&ndash;500 HV chưa có PM tốt</td><td><strong>~6,000&ndash;7,500 TT</strong></td></tr>
+<tr><td><strong>SOM</strong></td><td>Serviceable Obtainable Market &mdash; TT 100&ndash;400 HV Tier 2 đang tìm giải pháp</td><td><strong>~500&ndash;1,000 TT</strong></td></tr>
+</tbody>
+</table>
+</div>
+<p class="jargon">TAM = toàn bộ thị trường có thể nhắm. SAM = phần sản phẩm phục vụ được. SOM = phần thực tế chiếm được trong 1-2 năm.</p>
+
+<h2>North Star Metric</h2>
+<div class="info-box highlight" style="text-align:center">
+    <p style="font-size:15px"><strong>Doanh thu tăng thêm cho trung tâm nhờ edu-center.ai (VNĐ/tháng/trung tâm)</strong></p>
+    <p>(+) Lead mới chốt nhờ AI &nbsp;&nbsp; (+) Học phí thu thêm &nbsp;&nbsp; (-) Chi phí nhân sự tiết kiệm</p>
+</div>
+<p class="jargon">North Star Metric = con số duy nhất phản ánh giá trị sản phẩm mang lại cho khách hàng.</p>
+</div>
+
+</div> <!-- end .main -->
+</div> <!-- end .layout -->
+
+<script>
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('sec-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
